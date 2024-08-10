@@ -6,6 +6,8 @@ using LandscapeChange
 const NV = NamedVector
 using Rasters: Between
 
+include("landcover_settings.jl")
+
 # Get masks from SRTM dataset
 function load_srtm_masks()
     island_bounds = (
@@ -84,4 +86,12 @@ function summarise_timeline(s)
     removed = sum(+, re; dims=(X, Y)) |> _nt_vecs
     merged = sum(+, m; dims=(X, Y)) |> _nt_vecs
     return (; combined, filled, added, removed, uncertain, merged)
+end
+
+function _nt_vecs(xs::AbstractArray{<:NamedVector{K}}) where K
+    xs = dropdims(xs; dims=(X(), Y()))
+    vecs = map(1:length(K)) do i
+        getindex.(xs, i)
+    end
+    RasterStack(vecs...; name=K)
 end

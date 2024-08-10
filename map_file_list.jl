@@ -19,7 +19,7 @@ const HOMI = HOMI_CLASSES => (;
     abandoned=2017 => ["Forest", "Shrub_vegetation", "Barren_Land"],# "Herbaceaous_vegetation"], # Herbaceaous_vegetation is too noisy
     urban=2017 => ["Continuous_urban", "Discontinuous_urban"],
     forestry=2017 => "Forest",
-    water=2017 => "Water",
+    # water=2017 => "Water",
 )
 
 function define_map_files(; 
@@ -141,19 +141,18 @@ function define_map_files(;
                 ],
             ),
         # atlas_1992_vegetation = "$path/Data/Selected/Mauritius/Undigitised/atlas_1992_vegetation.jpg" => (;),
+        # "/home/raf/PhD/Mascarenes/Data/Selected/Mauritius/Undigitised/atlas_1992_agriculture.json"
         atlas_1992_agriculture = "$path/Data/Selected/Mauritius/Undigitised/atlas_1992_agriculture.jpg" => 
-            ["sea", "forest", "forestry", "urban", "cane", "forage", "tea", "lakes", "parks", "market_gardens", "cane_or_market_gardens", "cane_or_tea", "tea_or_market_gardens", "cane_or_fruit", "pasture"] => (;
+            ["sea","forest","forestry","urban","cane","forage","tea","lakes","parks","market_gardens","","","","cane_or_market_gardens","cane_or_tea","tea_or_market_gardens","cane_or_fruit","pasture"] => (;
                 native=1992 => "forest",
                 cleared=1992 => [
                     "cane", "forage", "tea", "market_gardens", "cane_or_market_gardens",
                     "cane_or_tea", "tea_or_market_gardens", "cane_or_fruit", "pasture",
                 ],
-                urban=1992 => "urban",
-                forestry=[
-                    1992 => "forestry",
-                ],
-                water=1992 => "lakes",
                 abandoned=1992 => ["pasture", "forest"],
+                urban=1992 => "urban",
+                forestry=1992 => "forestry",
+                water=1992 => "lakes",
             ),
         # desroches_1773_from_gleadow = "$path/Data/Selected/Mauritius/Undigitised/1773_desroches_from_gleadow.jpg" => (;
         #     conceded=1773 => "conceded_land",
@@ -213,10 +212,9 @@ function define_map_files(;
                 cleared=1984 => "cleared_1973-1984",
                 forestry=1984 => "cleared_1973-1984",
             ),
-        wlf = "$path/Data/Generated/Landcover/mus_wlf_shape.tif" => 
-            ["cleared", "other"] => (;
-                cleared=2002 => "cleared",
-            ),
+        # wlf = "$path/Data/Generated/Landcover/mus_wlf_shape.tif" => ["cleared", "other"] => (;
+        #         cleared=2002 => "cleared",
+        #     ),
         homiisland = "$path/Data/Generated/Landcover/mus_landcover.tif" => HOMI,
         forest = "$path/Data/Selected/Mauritius/forest.tif" => 
             ["low", "medium", "high"] => (;
@@ -264,7 +262,7 @@ function define_map_files(;
                 abandoned = 1815 => ["wasteland", "forest"],
             ),
         public_map ="/home/raf/PhD/Mascarenes/Data/Selected/Reunion/Undigitised/34.jpg" => 
-             ["vegetation1", "sea", "cleared1", "vegetation2", "vegetation3", "cleared2", "rock", "lake"] => (;
+             ["vegetation1","sea","cleared1","","","","vegetation2","vegetation3","","cleared2","rock","","","lake"] => (;
                 native=1958=>["vegetation1", "vegetation2", "vegetation3"],
                 cleared=1958=>["cleared1", "cleared2"],
                 abandoned=1958=>["vegetation1", "vegetation2", "vegetation3"],
@@ -296,10 +294,10 @@ function define_map_files(;
         quantifying_invasion_landcover = "$path/Data/Selected/Reunion/Undigitised/aec13048-fig-0001-m.jpg" => 
             ["Extant_native_vegetation", "Disturbed_secondary_vegetation", "Agricultural_areas", "Artificial_areas", "Water"] => (;
                 native=2019 => "Extant_native_vegetation",
-                abandoned=2019 => "Disturbed_secondary_vegetation",
-                forestry=2019 => "Disturbed_secondary_vegetation",
                 cleared=2019 => "Agricultural_areas",
+                abandoned=2019 => "Disturbed_secondary_vegetation",
                 urban=2019 => "Artificial_areas",
+                forestry=2019 => "Disturbed_secondary_vegetation",
             ),
     ), rod=(;
         # This was not at all accurate the urban areas may be decorative or suggestive
