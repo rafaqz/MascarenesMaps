@@ -1,6 +1,9 @@
 using ColorSchemes
 using CairoMakie
 
+include("map_file_list.jl")
+include("landcover_compilation.jl")
+
 function plot_timeline(timeline, striped, npixels; 
     states=keys(first(timeline)), 
     showkeys=keys(timeline)
@@ -50,9 +53,6 @@ function plot_timeline(timeline, striped, npixels;
     return fig
 end
 
-include("map_file_list.jl")
-include("landcover_compilation.jl")
-
 filelists = define_map_files()
 masks = load_srtm_masks() 
 landcover_statistics = map(filelists, masks) do f, m
@@ -64,5 +64,5 @@ striped_statistics = stripe_raster(landcover_statistics, states)
 name = :mus
 map(island_names) do name
     fig = plot_timeline(timeline_counts[name], striped_statistics[name], count(masks[name]))
-    save("images/$(name)_map_timeline.png", fig)
+    save("../images/$(name)_map_timeline.png", fig)
 end
