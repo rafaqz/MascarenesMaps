@@ -58,22 +58,22 @@ function define_map_files(;
                     1772 => ["cleared_1772", "abandoned_1810", "urban_1810"],
                     1810 => ["cleared_1772", "cleared_1810"],
                 ],
-                urban = [
-                    1763 => "urban_1763",
-                    1772 => ["urban_1763", "urban_1810"],
-                    1810 => ["urban_1763", "urban_1810"],
-                ],
                 abandoned=[
                     1763 => "abandoned_1810",
                     1772 => "abandoned_1810",
                     1810 => "abandoned_1810",
                 ],
+                urban = [
+                    1763 => "urban_1763",
+                    1772 => ["urban_1763", "urban_1810"],
+                    1810 => ["urban_1763", "urban_1810"],
+                ],
             ),
         fraser_1835_from_gleadow = "$path/Data/Selected/Mauritius/Undigitised/1835_fraser_from_gleadow.jpg" => 
              ["sea", "forest", "cleared"] => (;
-                    # abandoned=1835 => "forest",
                     native=1835 => "forest",
                     cleared=1835 => (!, "forest"),
+                    # abandoned=1835 => "forest",
                     # urban=1835 => (!, "forest"),
                     # water=1835 => (!, "forest"),
                 ),
@@ -121,12 +121,12 @@ function define_map_files(;
         # This will overwrite anything incorrect in the first file for the specified year
         atlas_19C_land_use_2 = "$path/Data/Selected/Mauritius/Undigitised/atlas_19C_land_use_2.jpg" => 
             ["abdn_1854-1905_cleared_1905-1968"] => (;
-                abandoned=[
-                    1905 => "abdn_1854-1905_cleared_1905-1968",
-                ],
                 cleared=[
                     1854 => "abdn_1854-1905_cleared_1905-1968",
                     # 1968 => "abdn_1854-1905_cleared_1905-1968",
+                ],
+                abandoned=[
+                    1905 => "abdn_1854-1905_cleared_1905-1968",
                 ],
             ),
         landcover_1965 = "$path/Data/Selected/Mauritius/Undigitised/mus_landuse_1965_100_hi_c.pdf" => 
@@ -136,9 +136,7 @@ function define_map_files(;
                 abandoned=1965 => ["Rock", "Scrub", "Savannah"],
                 urban=1965 => "Built_up",
                 forestry=1965 => "Forest_plantation",
-                water=[
-                    1965 => "Reservoirs",
-                ],
+                water=1965 => "Reservoirs",
             ),
         # atlas_1992_vegetation = "$path/Data/Selected/Mauritius/Undigitised/atlas_1992_vegetation.jpg" => (;),
         # "/home/raf/PhD/Mascarenes/Data/Selected/Mauritius/Undigitised/atlas_1992_agriculture.json"
@@ -190,7 +188,10 @@ function define_map_files(;
         # ),
         forestry_1975 = "$path/maps/Mauritius/Studies_of_Mascarine_birds/31.png-1.png" => 
             ["cleared_1975"] => (;
+                native=nothing,
                 cleared=1975 => "cleared_1975",
+                abandoned=nothing,
+                urban=nothing,
                 forestry=1975 => "cleared_1975",
             ),
         vegetation_1975 = "$path/maps/Mauritius/Studies_of_Mascarine_birds/9.png-1.png" => 
@@ -198,6 +199,7 @@ function define_map_files(;
                 native=1975 => ["surviving_native", "mixed_native_and_plantation"],
                 cleared=1975 => "cleared_1975",
                 abandoned=1975 => "exotic_scrub",
+                urban=nothing,
                 forestry=1975 => ["forest_plantation", "mixed_native_and_plantation"]
             ),
         forestry_1980 = "$path/maps/Mauritius/Studies_of_Mascarine_birds/49_2.png-1.png" => 
@@ -209,7 +211,10 @@ function define_map_files(;
             ),
         forestry_1984 = "$path/maps/Mauritius/Studies_of_Mascarine_birds/48.png-1.png" => 
             ["cleared_1973-1984"] => (;
-                cleared=1984 => "cleared_1973-1984",
+                native=nothing,
+                cleared=nothing,
+                abandoned=nothing,
+                urban=nothing,
                 forestry=1984 => "cleared_1973-1984",
             ),
         # wlf = "$path/Data/Generated/Landcover/mus_wlf_shape.tif" => ["cleared", "other"] => (;

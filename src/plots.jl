@@ -1,54 +1,58 @@
 
 # Timeline
 function plot_timeline(timeline, striped, npixels; 
-    states=keys(first(timeline)), 
+    states=keys(first(timeline)) , 
     showkeys=keys(timeline)
 )
     batlow = map(1:6) do i
         ColorSchemes.batlow[(i - 1) / 5]
     end
     l = lookup(first(timeline), Ti)
-    xticks = eachindex(l)
+    xticks = x = eachindex(l)
     xtickformat = i -> string.(getindex.(Ref(l), Int.(i)))
-    x = eachindex(l)
     fig = Figure(size=(2000, 2000));#, backgroundcolor="#a5b4b5")
-    j = 1
-    statistic = first(showkeys)
-    map_axes = map(enumerate(showkeys)) do (j, statistic)
-        heatmap_axes = map(1:length(x)) do i 
+
+    # Generate all axes for heatmaps
+    heatmap_axes = map(enumerate(showkeys)) do (j, statistic)
+        map(eachindex(l)) do i 
             A = striped[statistic][Ti=i]
-            ax = Axis(fig[j, i]; autolimitaspect=1)
+            if i == 1
+                ax = Axis(fig[j, i]; autolimitaspect=1, ylabel=string(statistic))
+            else
+                ax = Axis(fig[j, i]; autolimitaspect=1)
+            end
             tight_ticklabel_spacing!(ax)
             Makie.image!(ax, A; colormap=:batlow, colorrange=(1, 6), interpolate=false)
             hidedecorations!(ax)
             hidespines!(ax)
             ax
         end
-        heatmap_axes
     end
-    line_axis = Axis(fig[length(showkeys)+1, 1:length(x)];
+    # And link them all for zoom and pan
+    Makie.linkaxes!(Iterators.flatten(heatmap_axes)...)
+
+    # Generate 
+    line_axis = Axis(fig[length(showkeys)+1, 1:length(l)];
         backgroundcolor=:white, 
-        ylabel=titlecase(string(statistic)), 
         limits=((first(xticks) - 0.5, last(xticks) + 0.5), nothing),
-        xticks, xtickformat,
+        xticks, 
+        xtickformat,
     )
     line_axis.xzoomlock = true
-    if statistic != :merged 
-        hidexdecorations!(line_axis)
-    end
     hidespines!(line_axis)
-    i = 1
-    k = :native
-    y = timeline[:merged][k] ./ npixels
-    z = (timeline[:merged][k] .- timeline[:uncertain][k]) ./ npixels
-    Makie.band!(line_axis, x, y, z; color=batlow[i], alpha=0.4)
-    Makie.lines!(line_axis, x, z; color=batlow[i], linewidth=2)
-    Makie.linkaxes!(Iterators.flatten(map_axes)...)
+
+    for (i, k) in enumerate(keys(timeline[:merged]))
+        y = timeline[:merged][k] ./ npixels
+        z = (timeline[:merged][k] .- timeline[:uncertain][k]) ./ npixels
+        Makie.band!(line_axis, x, y, parent(z); color=batlow[i], alpha=0.4)
+        Makie.lines!(line_axis, x, parent(z); color=batlow[i], linewidth=2)
+    end
+
     colgap!(fig.layout, Relative(0.001))
     rowgap!(fig.layout, Relative(0.001))
-    return fig
-end
 
+    fig
+end
 
 # Habitat
 function plot_habitats!(fig, data; 
