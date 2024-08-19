@@ -1,9 +1,12 @@
+deleteat!(Base.LOAD_PATH, 2:3) # Don't allow other environments
+
 using Revise
 using Rasters
 using ColorSchemes
 using Colors
 using GLMakie
-# using CairoMakie
+using CairoMakie
+CairoMakie.activate!()
 
 using MascarenesMaps
 
@@ -13,8 +16,8 @@ filelists = define_map_files()
 masks = load_srtm_masks() 
 
 # Original vegetation rasters
-mus_veg_path = "/home/raf/PhD/Mascarenes/Data/Selected/Mauritius/Undigitised/page33_mauritius_vegetation_colored.tif"
-reu_veg_path = "/home/raf/PhD/Mascarenes/Data/Dominique/Vegetation_Rasters/pastveg3.tif"
+mus_veg_path = joinpath(basepath, "data/vegetation/mus/lostland_vegetaion.tif")
+reu_veg_path = joinpath(basepath, "data/vegetation/reu/strassberg_vegetaion.tif")
 
 # Habitat classes
 island_habitat_names = (;
@@ -42,8 +45,8 @@ uncertain_uncleared = map(landcover_statistics) do island
 end
 
 original_veg = (;
-    mus=reorder(replace_missing(Raster(mus_veg_path), 0), uncertain_uncleared.mus),
-    reu=reorder(resample(replace_missing(Raster(reu_veg_path), 0); to=masks.reu), uncertain_uncleared.reu),
+    mus=reorder(replace_missing(Raster(mus_veg_path), 0), dims(uncertain_uncleared.mus)),
+    reu=resample(reorder(replace_missing(Raster(reu_veg_path), 0), uncertain_uncleared.reu); to=masks.reu),
 )
 
 # Mask final vegetation maps
@@ -57,7 +60,8 @@ nhabitats = map(length, island_habitat_names)
 
 # Mauritius
 mus_fig = let
-    fig = Figure(; size=(1700, 2000));
+    collen, rowlen = size = (1700, 2400)
+    fig = Figure(; size);
     nrows, ncols = 5, 4
     # fig = Figure(; size=(2400, 1700));
     # nrows, ncols = 3, 6
@@ -67,22 +71,29 @@ mus_fig = let
     # Heatmaps
     plot_habitats!(fig, data; colormap=habitat_colors, nrows, ncols, show_uncertain=true) 
     # Legend
-    add_legend!(fig[nrows+1, ncols-1:ncols], habitat_colors, island_habitat_names.mus)
+    add_legend!(fig[nrows+1, ncols], habitat_colors, island_habitat_names.mus)
     # Area plot
     line_ax = Axis(fig[nrows+1, 1:ncols-1])
     plot_aggregate!(line_ax, data, habitat_colors)
-    # Pad the line plot little
-    # rowgap!(fig.layout, 5, 40)
     # Title
-    fig[nrows+2, :] = Label(fig, "Mauritius Habitat Loss (striped/transparent areas uncertain)"; fontsize=30)
+    # fig[nrows+2, :] = Label(fig, "Mauritius Habitat Loss (striped/transparent areas uncertain)"; fontsize=30)
+    for i in 1:nrows+1
+        # rowgap!(fig.layout, i, 1)
+        rowsize!(fig.layout, i, rowlen / (nrows + 1) * 0.85)
+    end
+    for i in 1:ncols
+        # i == ncols || colgap!(fig.layout, i, 0)
+        colsize!(fig.layout, i, collen / ncols)
+    end
     fig
 end
 save("$basepath/images/mauritius_habitat_loss.png", mus_fig)
 
 # Reunion
 reu_fig = let
-    fig = Figure(; size=(1700, 2000));
+    collen, rowlen = size = (1700, 2000)
     nrows, ncols = 3, 4
+    fig = Figure(; size);
     # fig = Figure(; size=(2400, 1700));
     # nrows, ncols = 2, 5
     data = uncleared.reu
@@ -90,14 +101,20 @@ reu_fig = let
     habitat_colors = map(x -> getproperty(ColorSchemes, cmap)[(x - 1) / (nhabitats.reu - 1) ], 1:nhabitats.reu)
     # Heatmaps
     plot_habitats!(fig, data; colormap=habitat_colors, nrows, ncols, show_uncertain=true);
-    add_legend!(fig[nrows+1, ncols], habitat_colors, island_habitat_names.reu)
+    add_legend!(fig[nrows:nrows+1, ncols], habitat_colors, island_habitat_names.reu)
     # Area plot
     line_ax = Axis(fig[nrows+1, 1:ncols-1])
     plot_aggregate!(line_ax, data, habitat_colors)
-    # Pad the line plot little
-    # rowgap!(fig.layout, 4, 100)
-    # Title
-    fig[nrows+2, :] = Label(fig, "Reunion Habitat Loss (striped/transparent areas uncertain)"; fontsize=30)
+    for i in 1:nrows+1
+        # i < nrows || rowgap!(fig.layout, i, 0)
+        rowsize!(fig.layout, i, rowlen / (nrows + 1) * 0.9)
+    end
+    for i in 1:ncols
+        # i == ncols || colgap!(fig.layout, i, 0)
+        colsize!(fig.layout, i, collen / ncols * 0.9)
+    end
     fig
 end
 save("$basepath/images/reunion_habitat_loss.png", reu_fig)
+
+

@@ -1,4 +1,4 @@
-# deleteat!(Base.LOAD_PATH, 2:3)
+deleteat!(Base.LOAD_PATH, 2:3) # Don't allow other environments
 
 using Revise
 using MascarenesMaps
@@ -8,7 +8,9 @@ basepath = realpath(joinpath(dirname(pathof(MascarenesMaps)), ".."))
 
 filelists = define_map_files()
 masks = load_srtm_masks() 
+states = MascarenesMaps.states
 
+filelists.timeline
 compiled = LandscapeChange.compile_timeline(filelists.mus, masks.mus, states)
 landcover_statistics = map(filelists, masks) do f, m
     compile_all(f, m, MascarenesMaps.transitions)

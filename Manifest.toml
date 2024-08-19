@@ -2,7 +2,7 @@
 
 julia_version = "1.10.2"
 manifest_format = "2.0"
-project_hash = "90c54b6fca133b97019d08d6727829576c025978"
+project_hash = "ef1d8e8519b15d062193fabffb5d2447cd7e971f"
 
 [[deps.ASCIIrasters]]
 git-tree-sha1 = "1880b17ca0e1c0edd3fa8a968fca20516af7436a"
@@ -278,9 +278,9 @@ version = "2.4.2"
 
 [[deps.ConstructionBase]]
 deps = ["LinearAlgebra"]
-git-tree-sha1 = "d8a9c0b6ac2d9081bf76324b39c78ca3ce4f0c98"
+git-tree-sha1 = "a33b7ced222c6165f624a3f2b55945fac5a598d9"
 uuid = "187b0558-2788-49d3-abe0-74a17ed4e7c9"
-version = "1.5.6"
+version = "1.5.7"
 weakdeps = ["IntervalSets", "StaticArrays"]
 
     [deps.ConstructionBase.extensions]
@@ -349,9 +349,9 @@ version = "1.9.1"
 
 [[deps.DimensionalData]]
 deps = ["Adapt", "ArrayInterface", "ConstructionBase", "DataAPI", "Dates", "Extents", "Interfaces", "IntervalSets", "InvertedIndices", "IteratorInterfaceExtensions", "LinearAlgebra", "PrecompileTools", "Random", "RecipesBase", "SparseArrays", "Statistics", "TableTraits", "Tables"]
-git-tree-sha1 = "18f0771430553c811bfc05f3f54030b34d6737e9"
+git-tree-sha1 = "ed5fe2063fbf76cc9863faa01e2517acdb742dfe"
 uuid = "0703355e-b756-11e9-17c0-8b28908087d0"
-version = "0.27.7"
+version = "0.27.8"
 
     [deps.DimensionalData.extensions]
     DimensionalDataCategoricalArraysExt = "CategoricalArrays"
@@ -400,7 +400,7 @@ version = "1.6.0"
 
 [[deps.DynamicGrids]]
 deps = ["Adapt", "Colors", "ConstructionBase", "Crayons", "Dates", "DimensionalData", "DocStringExtensions", "FileIO", "FreeTypeAbstraction", "KernelAbstractions", "LinearAlgebra", "ModelParameters", "REPL", "Random", "Reexport", "Setfield", "StaticArrays", "Stencils", "Test", "UnicodeGraphics"]
-git-tree-sha1 = "7ab46903bad35155cbbe5987cc62636e41c8755f"
+git-tree-sha1 = "4379c44cafb1ab45d34299bb9533b10775e58582"
 repo-rev = "dev"
 repo-url = "https://github.com/cesaraustralia/DynamicGrids.jl.git"
 uuid = "a5dba43e-3abc-5203-bfc5-584ca68d3f5b"
@@ -500,9 +500,9 @@ uuid = "7b1f6079-737a-58dc-b8bc-7a2ca5c1b5ee"
 
 [[deps.FillArrays]]
 deps = ["LinearAlgebra"]
-git-tree-sha1 = "0653c0a2396a6da5bc4766c43041ef5fd3efbe57"
+git-tree-sha1 = "fd0002c0b5362d7eb952450ad5eb742443340d6e"
 uuid = "1a297f60-69ca-5386-bcde-b61e274b549b"
-version = "1.11.0"
+version = "1.12.0"
 weakdeps = ["PDMats", "SparseArrays", "Statistics"]
 
     [deps.FillArrays.extensions]
@@ -569,9 +569,9 @@ version = "1.8.0"
 
 [[deps.GDAL_jll]]
 deps = ["Arrow_jll", "Artifacts", "Blosc_jll", "Expat_jll", "GEOS_jll", "HDF5_jll", "JLLWrappers", "LibCURL_jll", "LibPQ_jll", "Libdl", "Libtiff_jll", "Lz4_jll", "NetCDF_jll", "OpenJpeg_jll", "PCRE2_jll", "PROJ_jll", "Qhull_jll", "SQLite_jll", "XML2_jll", "XZ_jll", "Zlib_jll", "Zstd_jll", "libgeotiff_jll", "libpng_jll", "libwebp_jll"]
-git-tree-sha1 = "1a607f3fb5c0ef3b5149692e615086f487af1d89"
+git-tree-sha1 = "f1a5ace73ff130427b7816b13cd4bc905ace16ca"
 uuid = "a7073274-a066-55f0-b90d-d619367d196c"
-version = "301.901.101+0"
+version = "301.901.200+0"
 
 [[deps.GEOS_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
@@ -937,9 +937,9 @@ version = "0.0.31+0"
 
 [[deps.LLVMOpenMP_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "d986ce2d884d49126836ea94ed5bfb0f12679713"
+git-tree-sha1 = "e16271d212accd09d52ee0ae98956b8a05c4b626"
 uuid = "1d63c593-3942-5779-bab2-d838dc0a180e"
-version = "15.0.7+0"
+version = "17.0.6+0"
 
 [[deps.LRUCache]]
 git-tree-sha1 = "b3cc6698599b10e652832c2f23db3cab99d51b59"
@@ -1485,9 +1485,9 @@ version = "0.6.0"
 
 [[deps.Rasters]]
 deps = ["Adapt", "ColorTypes", "CommonDataModel", "ConstructionBase", "Dates", "DimensionalData", "DiskArrays", "Extents", "FillArrays", "Flatten", "GeoFormatTypes", "GeoInterface", "Missings", "Mmap", "OffsetArrays", "ProgressMeter", "RecipesBase", "Reexport", "Setfield"]
-git-tree-sha1 = "2ffb8b4cc1ae6355cbc8d8d78bc7ed3a8c5b5fa0"
+git-tree-sha1 = "1dceb16b3f6982f4f161d30b6afc96349ef86c38"
 uuid = "a3a2b9e3-a471-40c9-b274-f788e487c689"
-version = "0.11.4"
+version = "0.11.5"
 
     [deps.Rasters.extensions]
     RastersArchGDALExt = "ArchGDAL"
@@ -1496,15 +1496,16 @@ version = "0.11.4"
     RastersMakieExt = "Makie"
     RastersNCDatasetsExt = "NCDatasets"
     RastersRasterDataSourcesExt = "RasterDataSources"
+    RastersZarrDatasetsExt = "ZarrDatasets"
 
     [deps.Rasters.weakdeps]
     ArchGDAL = "c9ce4bd3-c3d5-55b8-8973-c0e20141b8c3"
     CoordinateTransformations = "150eb455-5306-5404-9cee-2592286d6298"
     GRIBDatasets = "82be9cdb-ee19-4151-bdb3-b400788d9abc"
-    HDF5 = "f67ccb44-e63f-5c2f-98bd-6dc0ccc4ba2f"
     Makie = "ee78f7c6-11fb-53f2-987a-cfe4a2b5a57a"
     NCDatasets = "85f8d34a-cbdd-5861-8df4-14fed0d494ab"
     RasterDataSources = "3cb90ccd-e1b6-4867-9617-4276c8b2ca36"
+    ZarrDatasets = "519a4cdf-1362-424a-9ea1-b1d782dbb24b"
 
 [[deps.Ratios]]
 deps = ["Requires"]

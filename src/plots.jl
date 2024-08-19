@@ -1,7 +1,7 @@
 
 # Timeline
 function plot_timeline(timeline, striped, npixels; 
-    states=keys(first(timeline)) , 
+    states=keys(first(timeline)), 
     showkeys=keys(timeline)
 )
     batlow = map(1:6) do i
@@ -10,7 +10,7 @@ function plot_timeline(timeline, striped, npixels;
     l = lookup(first(timeline), Ti)
     xticks = x = eachindex(l)
     xtickformat = i -> string.(getindex.(Ref(l), Int.(i)))
-    fig = Figure(size=(2000, 2000));#, backgroundcolor="#a5b4b5")
+    fig = Figure(size=(2000, 2000))
 
     # Generate all axes for heatmaps
     heatmap_axes = map(enumerate(showkeys)) do (j, statistic)
@@ -61,23 +61,25 @@ function plot_habitats!(fig, data;
     whites = [RGB(1), RGB(1)] 
     axs = map(axes(data.certain, Ti)) do i
         stripe = Makie.LinePattern(; 
-            direction=Vec2f(1), width=3, tilesize=(10, 10),
-            linecolor=(:grey, 0.7), background_color=(:white, 0.0)
+            direction=Vec2f(1), 
+            width=3, 
+            tilesize=(8, 8),
+            linecolor=(:darkgrey, 0.8), 
+            background_color=(:black, 0.1),
         )
-        n = length(axes(data.certain, Ti))
+        n = length(Base.axes(data.certain, Ti))
         r = rem(n, i)
         ax = Axis(fig[fldmod1(i, ncols)...]; 
-            # aspect=DataAspect(),
             autolimitaspect=1,
             title=string(lookup(data.certain, Ti)[i]),
-            titlesize=20,
+            titlesize=30,
         )
         tight_ticklabel_spacing!(ax)
         if show_uncertain
             uncertain = data.uncertain[Ti=i]
-            Makie.heatmap!(ax, uncertain; alpha=0.5, colormap)
+            Makie.heatmap!(ax, uncertain; alpha=0.9, colormap, transparency=true)
             stripemask = map(uncertain) do x
-                x > 0 ? missing : 1
+                x > 0 ? NaN : 1.0
             end
             bs = Rasters.bounds(stripemask)
             rect = Polygon([
@@ -87,10 +89,10 @@ function plot_habitats!(fig, data;
                 Point2f(bs[1][2], bs[2][1]), 
                 Point2f(bs[1][1], bs[2][1]), 
             ])
-            poly!(ax, rect; color=stripe, strokewidth=0)
-            Makie.heatmap!(ax, stripemask; colormap=whites, colorrange=(0, 1))
+            poly!(ax, rect; color=stripe, strokewidth=0, transparency=true)
+            Makie.heatmap!(ax, stripemask; colormap=whites, colorrange=(0, 1), transparency=true)
         end
-        Makie.heatmap!(ax, data.certain[Ti=i]; colormap)
+        Makie.heatmap!(ax, data.certain[Ti=i]; colormap, transparency=true)
         hidedecorations!(ax)
         hidespines!(ax)
         ax
@@ -118,18 +120,21 @@ function plot_aggregate!(ax, data, habitat_colors)
     for i in reverse(eachindex(habitat_colors))
         color = habitat_colors[i]
         stripe = Makie.LinePattern(; 
-            direction=Vec2f(1), width=5, tilesize=(20, 20),
-            linecolor=(:grey, 0.7), background_color=(color, 0.7),
+            direction=Vec2f(1), 
+            width=3, 
+            tilesize=(8, 8),
+            linecolor=(:darkgrey, 0.8), 
+            background_color=(:black, 0.1),
         )
         a = certain_agg[i] ./ npixels .+ base
         b = (certain_agg[i] .+ uncertain_agg[i]) ./ npixels .+ base
         l = parent(lookup(a, Ti))
-        lines!(ax, l, a; color, ticksize=14)
-        band!(ax, l, base, a; color)
+        lines!(ax, collect(l), collect(a); color)
+        band!(ax, l, base, b; color)
         pa = Point2f.(l, a)
         pb = Point2f.(l, b)
         polygon = [pa..., pb[end:-1:1]..., pa[1]]
-        poly!(ax, polygon; color=stripe, strokewidth=0)#, alpha=0.5)
+        poly!(ax, polygon; color=stripe, strokewidth=0, transparency=true)
         base = b
     end
 end
@@ -142,9 +147,9 @@ function add_legend!(position, habitat_colors, habitat_names)
     end
     names = replace.(habitat_names, Ref('_' => ' '))
     Legend(position, habitat_elements, names, "Habitat class"; 
-        titlesize=22,
+        titlesize=30,
         framevisible=false,
-        labelsize=18,
+        labelsize=20,
         patchsize=(30.0f0, 30.0f0)
     )
 end
