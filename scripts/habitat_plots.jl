@@ -1,4 +1,4 @@
-deleteat!(Base.LOAD_PATH, 2:3) # Don't allow other environments
+deleteat!(Base.LOAD_PATH, 2:lastindex(Base.LOAD_PATH)) # Don't allow other environments
 
 using Revise
 using Rasters
