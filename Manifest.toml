@@ -963,7 +963,9 @@ version = "1.3.1"
 
 [[deps.LandscapeChange]]
 deps = ["Dates", "Distributions", "DynamicGrids", "LinearAlgebra", "Rasters", "Reexport", "Statistics"]
-path = "/home/raf/.julia/dev/LandscapeChange"
+git-tree-sha1 = "2f100da71e5ecc50c3467835f7645e064fdc32c2"
+repo-rev = "main"
+repo-url = "https://github.com/rafaqz/LandscapeChange.jl"
 uuid = "10a95938-cbff-4ff0-a2a3-33d289cf79a5"
 version = "0.1.0"
 
