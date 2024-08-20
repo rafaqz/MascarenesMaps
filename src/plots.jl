@@ -1,6 +1,6 @@
 
 # Timeline
-function plot_timeline(timeline, striped, npixels; 
+function plot_compilation(timeline, striped, npixels; 
     states=keys(first(timeline)), 
     showkeys=keys(timeline)
 )
