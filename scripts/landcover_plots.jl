@@ -20,6 +20,7 @@ striped_statistics = stripe_raster(landcover_statistics, MascarenesMaps.states)
 name = :mus
 map(MascarenesMaps.island_names) do name
     timeline, striped, npixels = timeline_counts[name], striped_statistics[name], count(masks[name])
-    fig = plot_compilation(timeline, striped, npixels)
+    fig = Figure(size=(2000, 2000))
+    fig = plot_compilation!(fig, timeline, striped, npixels)
     save("$basepath/images/$(name)_map_timeline.png", fig)
 end

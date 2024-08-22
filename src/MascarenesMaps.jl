@@ -19,7 +19,7 @@ using Rasters: Between
 
 export define_map_files
 
-export plot_compilation
+export plot_compilation!
 
 export plot_habitats!, plot_aggregate!, add_legend! 
 

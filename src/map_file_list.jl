@@ -37,10 +37,12 @@ function define_map_files(;
     # The function will later be broadcasted over masks of the separate layers to combine them
     # Mostly is `|` which is "or" so we make a mask of values that are true in one or the other file
     file_details = (mus=(;
+        original_state = nothing => (;
+            native=1600 => :mask 
+        ),
         atlas_dutch_period = joinpath(mus_path, "atlas_dutch_period.tif") => 
         ["sea", "undisturbed", "ebony_harvest", "cleared"] => (;
             native=[
-                1600 => :mask,
                 1709 => ["ebony_harvest", "undisturbed"], # Abandoned after this
                 1721 => ["ebony_harvest", "undisturbed"], # Resettled, assume continuity
             ],
@@ -247,10 +249,12 @@ function define_map_files(;
                 cleared=[1715 => "concede_1665-1715", 
                          1765 => ["concede_1665-1715", "conceded_1715-1765"]],
             ),
+        original_state = nothing => (; 
+            native=1600 => :mask,
+        ),
         atlas_1780_agriculture = joinpath(reu_path, "atlas_1780_agriculture.tif") => 
             ["sea", "native", "maize", "grazing", "kafe", "cleared", "rock"] => (;
                 native = [
-                    1600 => :mask,
                     1780 => ["native", "rock"]
                 ],
                 cleared = 1780 => (!, ["native", "rock"]),
@@ -292,14 +296,18 @@ function define_map_files(;
                 forestry=2019 => "Disturbed_secondary_vegetation",
             ),
     ), rod=(;
+        original_state = nothing => (; 
+            native=1700 => :mask,
+        ),
         gade_1985_1 = joinpath(rod_path, "gade_1985_1.tif") => 
             ["native_remnant"] => (;
-                native = [1700 => :mask, 1985 => :force => "native_remnant"],
+                native=1985 => :force => "native_remnant",
             ),
         gade_1985_2 = joinpath(rod_path, "gade_1985_2.tif") => 
             ["reforested", "cultivated", "grazing", "fallow_or_settled"] => (;
-                abandoned=1985 => ["reforested", "fallow_or_settled"],
+                native=nothing,
                 cleared=1985 => ["cultivated", "grazing", "fallow_or_settled"],
+                abandoned=1985 => ["reforested", "fallow_or_settled"],
                 urban=1985 => "fallow_or_settled", # Unclear how large the "fallow" part is
             ),
         homiisland = joinpath(rod_path, "homiisland.tif") => 
