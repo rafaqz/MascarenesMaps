@@ -56,7 +56,11 @@ end
 # Habitat
 
 function plot_all!(fig, originals, categorized, collated, compiled, habitat=nothing;
-    years, kw...
+    years, 
+    kw...
+    titlesize=50,
+    ylabelsize=titlesize,
+    arrowsize=30,
 )
     row = 1
     original_rows = Symbol[]
@@ -92,10 +96,17 @@ function plot_all!(fig, originals, categorized, collated, compiled, habitat=noth
             original_rows[i] = Symbol("")
         end
     end
-    @show original_rows
 
-    ax1 = Axis(fig[1, 1]; autolimitaspect=1, title="Original")
-    ax2 = Axis(fig[1, 2]; autolimitaspect=1, title="Categorized")
+    ax1 = Axis(fig[1, 1]; 
+        autolimitaspect=1, 
+        title="Original",
+        titlesize,
+    )
+    ax2 = Axis(fig[1, 2]; 
+        autolimitaspect=1, 
+        title="Categorized",
+        titlesize,
+    )
 
     hidespines!.((ax1, ax2))
     hidedecorations!.((ax1, ax2); label=false)
@@ -107,9 +118,17 @@ function plot_all!(fig, originals, categorized, collated, compiled, habitat=noth
         c = categorized[k]
         ax_o = Axis(fig[i, 1];
             autolimitaspect=1,
+            title=i == 1 ? "Original" : ""
             ylabel=titlecase(replace(string(k), '_' => ' '))
+            titlesize,
+            ylabelsize,
         )
-        ax_c = Axis(fig[i, 2]; autolimitaspect=1,)
+        ax_c = Axis(fig[i, 2]; 
+            autolimitaspect=1,
+            title=i == 1 ? "Categorized" : ""
+            titlesize,
+            ylabelsize,
+        )
         hidespines!.((ax_o, ax_c))
         hidedecorations!.((ax_o, ax_c); label=false)
         if !isnothing(o)
@@ -127,8 +146,16 @@ function plot_all!(fig, originals, categorized, collated, compiled, habitat=noth
         last_y = y
         a = collated[Ti=At(y)]
         b = compiled[Ti=At(y)]
-        ax1 = Axis(fig[p, 4]; autolimitaspect=1, title=p == 1 ? "Collated" : "")
-        ax2 = Axis(fig[p, 5]; autolimitaspect=1, title=p == 1 ? "Compiled" : "")
+        ax1 = Axis(fig[p, 4]; 
+            autolimitaspect=1, 
+            title=p == 1 ? "Collated" : ""
+            titlesize,
+        )
+        ax2 = Axis(fig[p, 5]; 
+            autolimitaspect=1, 
+            title=p == 1 ? "Compiled" : ""
+            titlesize,
+        )
         push!(axs, ax1, ax2)
         ab_kw = (interpolate=false, colormap=:batlow, colorrange=(1, 6))
         isnothing(a) || image!(ax1, a; ab_kw...)
@@ -139,6 +166,8 @@ function plot_all!(fig, originals, categorized, collated, compiled, habitat=noth
                 title=p == 1 ? "Habitat" : "",
                 ylabel=string(y),
                 yaxisposition=:right,
+                titlesize,
+                ylabelsize,
             )
             push!(axs, ax)
             i = Rasters.selectindices(dims(habitat.certain, Ti), At(y))
@@ -164,14 +193,15 @@ function plot_all!(fig, originals, categorized, collated, compiled, habitat=noth
         k == Symbol("") && continue
         spacer = 0.0
         for y in years[k]
-            j = findfirst(==(y), row_years)
+            j = findlast(==(y), row_years)
             x = 0.2
             u = 0.8 - x
             y = nrows - i + 0.5
-            v = i - j
+            v = i == j ? 0.0 : (i - j) + 0.1
             arrows!(line_ax, [x], [y], [u], [v];
                 linewidth=5,
                 color=:black,
+                arrowsize,
             )
             spacer += 0.05
         end
@@ -187,7 +217,7 @@ function plot_habitats!(fig, data; nrows, ncols, kw...)
         ax = Axis(fig[fldmod1(i, ncols)...];
             autolimitaspect=1,
             title=string(lookup(data.certain, Ti)[i]),
-            titlesize=30,
+            titlesize,
         )
         plot_habitat!(ax, data, i; kw...)
     end
