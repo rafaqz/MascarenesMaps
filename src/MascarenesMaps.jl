@@ -6,26 +6,31 @@ using ColorSchemes
 using DataFrames
 using DBFTables
 using GeometryBasics
-using LandscapeChange
+import LandscapeChange
 using Makie
 using Rasters
 using RasterDataSources
 using Stencils
 
 using Rasters.Lookups
+using LandscapeChange: NamedVector
 
 const NV = NamedVector
 using Rasters: Between
 
-export define_map_files
+export define_category_links
 
 export plot_compilation!
 
 export plot_habitats!, plot_aggregate!, add_legend! 
 
-export compile_all, load_srtm_masks, summarise_timeline
+export plot_process!
 
-export stripe_raster, load_srtm_masks
+export compile_all, load_srtm_masks, summarise_timeline, standardize_timeline
+
+export stripe_raster, color_raster, namedvector_raster, cross_validate_timeline
+
+export Link
 
 const basepath = realpath(joinpath(@__DIR__, ".."))
 
@@ -34,7 +39,6 @@ include("transitions.jl")
 include("landcover_settings.jl")
 include("map_file_list.jl")
 include("plots.jl")
-include("landcover_compilation.jl")
 include("rasters.jl")
 
 end
