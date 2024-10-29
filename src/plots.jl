@@ -140,8 +140,6 @@ function plot_aggregate!(ax, data, habitat_colors)
 end
 
 function add_legend!(position, habitat_colors, habitat_names)
-    fig = position.layout.parent 
-    # Legend
     habitat_elements = map(habitat_colors) do color
         PolyElement(; color, strokewidth=0)
     end
