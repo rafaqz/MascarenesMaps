@@ -3,11 +3,13 @@ _prepare(A::Raster{<:Color}) = parent(A)
 _prepare(A::AbstractDimArray) = parent(A)
 _prepare(A) = A
 
+using Printf
+
 # Timeline
 function plot_compilation!(fig, timeline, striped, npixels;
     states=keys(first(timeline)),
     showkeys=keys(timeline),
-    labelsize=50.0,
+    labelsize=20.0,
 )
     batlow = map(1:6) do i
         ColorSchemes.batlow[(i - 1) / 5]
@@ -16,23 +18,37 @@ function plot_compilation!(fig, timeline, striped, npixels;
 
     # Generate all axes for heatmaps
     heatmap_axes = map(enumerate(showkeys)) do (j, statistic)
+        title_ax = Axis(fig[0, 2j-1:2j];)
+        xlims!(title_ax, (0, 1))
+        ylims!(title_ax, (0, 1))
+        hidedecorations!(title_ax)
+        hidespines!(title_ax)
+        title = titlecase(replace(string(statistic), '_' => '\n'))
+        text!(title_ax, 0.5, 0.5; 
+            text=title, fontsize=labelsize, align=(:center, :center)
+        )
+
         map(eachindex(l)) do i
             A = striped[statistic][Ti=i]
-            if i == 1
-                ax = Axis(fig[i, j];
-                    autolimitaspect=1,
-                    aspect=AxisAspect(1),
-                    xlabel=titlecase(replace(string(statistic), '_' => ' ')),
-                    xlabelsize=labelsize,
-                    xaxisposition=:top,
-                )
-            else
-                ax = Axis(fig[i, j];
-                    autolimitaspect=1,
-                    aspect=AxisAspect(1),
-                )
+            ax = Axis(fig[i, 2j-1];
+                autolimitaspect=1,
+                aspect=AxisAspect(1),
+            )
+            t_ax = Axis(fig[i, 2j])
+            xlims!(t_ax, (0, 1))
+            ylims!(t_ax, (0, 1))
+            hidedecorations!(t_ax)
+            hidespines!(t_ax)
+            fracs = map(timeline[statistic][Ti=i]) do x
+                @sprintf "%.2f" x / npixels
             end
-            Makie.image!(ax, _prepare(A); colormap=:batlow, colorrange=(1, 6), interpolate=false)
+            fractext = join(fracs, "\n")
+            labeltext = join(first.(string.(keys(fracs))), ":\n")
+            text!(t_ax, 0.0, 0.5; text=labeltext, align=(:left, :center))
+            text!(t_ax, 0.45, 0.5; text=fractext, align=(:left, :center))
+            Makie.image!(ax, _prepare(A); 
+                colormap=:batlow, colorrange=(1, 6), interpolate=false
+            )
             hidedecorations!(ax; label=false)
             hidespines!(ax)
             ax
@@ -43,11 +59,16 @@ function plot_compilation!(fig, timeline, striped, npixels;
 
     # # Generate
     rev_l = reverse(l)
-    line_axis = Axis(fig[1:length(l), length(showkeys)+1];
+    title_ax = Axis(fig[0, 2length(showkeys)+1];)
+    xlims!(title_ax, (0, 1))
+    ylims!(title_ax, (0, 1))
+    hidedecorations!(title_ax)
+    hidespines!(title_ax)
+    text!(title_ax, 0.5, 0.5; 
+        text="Landcover\nfraction", fontsize=labelsize, align=(:center, :center)
+    )
+    line_axis = Axis(fig[1:length(l), 2length(showkeys)+1];
         backgroundcolor=:white,
-        xlabel="Landcover fraction",
-        xticklabelsize=labelsize/1.3,
-        xlabelsize=labelsize,
         xaxisposition=:top,
         limits=(nothing, (first(eachindex(l)) - 0.5, last(eachindex(l)) + 0.5)),
         yticks=eachindex(l),
@@ -70,6 +91,11 @@ function plot_compilation!(fig, timeline, striped, npixels;
 
     colgap!(fig.layout, Relative(0.001))
     rowgap!(fig.layout, Relative(0.001))
+    smallcol = 0.5 / (2length(showkeys))
+    map(1:2length(showkeys)) do i
+        iseven(i) && colsize!(fig.layout, i, Relative(smallcol))
+    end
+    rowsize!(fig.layout, 0, Relative(0.5 / length(l)))
 
     fig
 end
@@ -237,6 +263,7 @@ function plot_habitats!(fig, data;
             autolimitaspect=1,
             title=string(lookup(data.certain, Ti)[i]),
             titlesize,
+            xlabel
         )
         plot_habitat!(ax, data, i; kw...)
     end

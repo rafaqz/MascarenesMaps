@@ -6,6 +6,9 @@ using ColorSchemes
 using Colors
 using FileIO
 using ImageIO
+using Statistics
+using StatsBase
+using DataFrames
 
 using CairoMakie
 CairoMakie.activate!()
@@ -49,7 +52,7 @@ end
 
 original_veg = (;
     mus=reorder(replace_missing(Raster(mus_veg_path), 0), dims(uncertain_uncleared.mus)),
-    reu=resample(reorder(replace_missing(Raster(reu_veg_path), 0), uncertain_uncleared.reu); to=masks.reu),
+    reu=Rasters.resample(reorder(replace_missing(Raster(reu_veg_path), 0), uncertain_uncleared.reu); to=masks.reu),
 )
 
 # Mask final vegetation maps
@@ -61,6 +64,27 @@ habitat = map(original_veg, certain_uncleared[k], uncertain_uncleared[k]) do v, 
 end
 nhabitats = map(length, island_habitat_names)
 
+# Haitat loss stats
+map(habitat, island_habitat_names) do island, names
+    n = count(>(0), island.certain[Ti=Begin])
+    uncertain = map(eachslice(island.uncertain; dims=Ti)) do s
+        map(eachindex(names)) do i
+            count(==(i), s)
+        end
+    end
+    certain = map(eachslice(island.certain; dims=Ti)) do s
+        map(eachindex(names)) do i
+            count(==(i), s)
+        end
+    end
+    map(enumerate(names)) do (i, name)
+        lower = (certain[Ti=Begin][i] / n, certain[Ti=End][i] / n)
+        upper = ((certain[Ti=Begin][i] + uncertain[Ti=Begin][i]) / n, (certain[Ti=End][i] + uncertain[Ti=End][i]) / n)
+        lower_loss = 1 - lower[2] / lower[1]
+        upper_loss = 1 - upper[2] / upper[1]
+        (; name, lower_loss, upper_loss) 
+    end |> DataFrame
+end
 
 # Mauritius
 mus_fig = let

@@ -3,7 +3,7 @@ const category_names = NamedTuple{keys(states)}(keys(states))
 const island_names = (; mus=:mus, reu=:reu, rod=:rod)
 
 const transitions = NV(
-    native    = NV(native=true,  cleared=false, abandoned=false, urban=false, forestry=false,  water=false),
+    native    = NV(native=true,  cleared=false, abandoned=true, urban=false, forestry=false,  water=false),
     cleared   = NV(native=true,  cleared=true,  abandoned=true,  urban=false, forestry=false,  water=false),
     abandoned = NV(native=false, cleared=true,  abandoned=true,  urban=false,  forestry=false,  water=false),
     urban     = NV(native=false,  cleared=true,  abandoned=true,  urban=true,  forestry=false,  water=false),

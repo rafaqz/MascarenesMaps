@@ -16,15 +16,15 @@ landcover_statistics = map(category_links, masks) do cl, m
     compile_all(cl, m, MascarenesMaps.transitions)
 end
 timeline_counts = map(summarise_timeline, landcover_statistics)
-striped_statistics = stripe_raster(landcover_statistics, MascarenesMaps.states)
+striped_statistics = MascarenesMaps.stripe_raster(landcover_statistics, MascarenesMaps.states)
 
-name = :mus
-sizes = (; mus=(1500, 2800), reu=(1800, 2400), rod=(1800, 1000))
-sze = sizes.mus
+name = :rod
+sizes = (; mus=(2000, 2800), reu=(2100, 2400), rod=(2300, 1000))
+sze = sizes[name]
 
 foreach(MascarenesMaps.island_names, sizes) do name, sze
     timeline, striped, npixels = timeline_counts[name], striped_statistics[name], count(masks[name]);
-    fig = Figure(; size=sze .* 2);
+    fig = Figure(; size=floor.(sze .* 0.75));
     plot_compilation!(fig, timeline, striped, npixels)
     save("$basepath/images/timeline_compilation_$(name).png", fig)
 end
